@@ -86,7 +86,7 @@ function outputRow(videoId, videoName) {
 
   // If we do not have the video name, it means the video is deleted/private instead of blocked
   const cell2 = document.createElement('td');
-  cell2.appendChild(document.createTextNode(videoName ? 'Blocked' : 'Deleted/Private'));
+  cell2.appendChild(document.createTextNode(videoName ? 'Blocked' : 'Unavailable'));
   row.appendChild(cell2);
 
   const cell3 = document.createElement('td');
