@@ -17,41 +17,44 @@
   <title>Show Unavailable Videos</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<div class="p-4 my-3 text-center">
-  <img class="d-block mx-auto mb-4 my-1" src="suv70.png" alt="icon" height="70">
+<div class="p-2 p-sm-3 p-md-4 pt-lg-5 my-3 text-center">
+  <img class="d-block mx-auto mb-3 my-1" src="suv70.png" alt="icon" height="70">
   <h1 class="display-5 fw-bold">Show Unavailable Videos</h1>
-  <div class="col-6 mx-auto my-4 lead">
+  <div class="col-11 col-md-9 col-lg-8 col-xl-7 col-xxl-6 mx-auto my-4 lead">
     Managing large playlists on Youtube is a pain. Often, videos will be blocked or disappear, and Youtube
     doesn't make it easy to keep track of this. Input a public / unlisted playlist code and your country code
     below, and you will be shown any videos that have been deleted, blocked or are unavailable.
   </div>
-  <div class="col-4 mx-auto">
+  <div class="col-11 col-md-9 col-lg-7 col-xl-5 col-xxl-4 mx-auto">
     <form class="p-4 border rounded-3 bg-light">
       <div class="mb-3 row align-items-center">
-        <label for="playlistId" class="col-2 col-form-label text-start">Playlist Code</label>
-        <div class="col-10">
+        <label for="playlistId" class="col-md-2 col-form-label text-start">Playlist Code</label>
+        <div class="w-100 d-md-none"></div>
+        <div class="col-md-10">
           <div class="input-group">
-            <span class="input-group-text">https://www.youtube.com/playlist?list=</span>
+            <span class="d-none d-sm-flex input-group-text">youtube.com/playlist?list=</span>
             <input type="text" class="form-control" id="playlistId">
           </div>
         </div>
+        <div class="d-sm-none col-auto form-text">
+          The code that comes after <span class="font-monospace">youtube.com/playlist?list=</span>
+        </div>
       </div>
       <div class="mb-3 row align-items-center">
-        <label for="countryCode" class="col-2 col-form-label text-start">Country Code</label>
-        <div class="col-2">
+        <label for="countryCode" class="col-md-2 col-form-label text-start">Country Code</label>
+        <div class="w-100 d-md-none"></div>
+        <div class="col-sm-2">
           <input type="text" class="form-control" id="countryCode" value="US">
         </div>
-        <div class="col-auto">
-          <span class="form-text">
-            Find your two-letter country code <a href="https://www.iban.com/country-codes">here</a>.
-          </span>
+        <div class="col-auto form-text">
+          Find your two-letter country code <a href="https://www.iban.com/country-codes">here</a>.
         </div>
       </div>
       <button type="button" id="submit" class="w-100 btn btn-lg btn-primary">Show Unavailable Videos</button>
     </form>
   </div>
-  <span id="spinner" class="spinner-border text-primary my-5 hidden" style="width: 3rem; height: 3rem;"></span>
-  <div id="table" class="col-5 mx-auto mt-5 hidden">
+  <span id="spinner" class="spinner-border text-primary mt-5 hidden" style="width: 3rem; height: 3rem;"></span>
+  <div id="table" class="col-11 col-md-10 col-lg-9 col-xl-8 col-xxl-6 mx-auto mt-3 hidden">
     <table class="table table-striped">
       <thead>
       <tr>
@@ -61,38 +64,19 @@
         <th>Search Link</th>
       </tr>
       </thead>
-      <tbody id="tablebody">
-      <tr>
-        <th>1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th>2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th>3</th>
-        <td>Larry the Bird</td>
-        <td></td>
-        <td>@twitter</td>
-      </tr>
-      </tbody>
+      <tbody id="tablebody"></tbody>
     </table>
   </div>
-  <div id="resultsText" class="col-5 mx-auto my-5 lead text-success hidden">
+  <div id="resultsText" class="col-11 mx-auto mt-3 lead text-success hidden">
     Congratulations! Your playlist is fully available.
   </div>
 </div>
-<footer class="d-flex flex-wrap col-5 py-3 my-4 border-top mt-auto mx-auto">
-  <div class="col-6 d-flex align-items-center">
+<footer class="d-flex flex-wrap col-11 col-md-10 col-lg-9 col-xl-8 col-xxl-6 py-3 my-4 border-top mt-auto mx-auto">
+  <div class="col-9 d-flex align-items-center">
     <img class="mx-3" src="suv70.png" alt="icon" height="20">
     <span class="text-muted">Show Unavailable Videos &copy; 2022 David Ragusa</span>
   </div>
-  <div class="col-6 d-flex justify-content-end">
+  <div class="col-3 d-flex justify-content-end">
     <a class="mx-3" href="https://github.com/dcragusa/ShowUnavailableVideos">Github</a>
   </div>
 </footer>
