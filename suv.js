@@ -1,20 +1,15 @@
-const API_KEY = 'AIzaSyCPbFD7_-Dfb6694tKO4Q7nymekTRmLubQ'
-const API_ROOT = 'https://www.googleapis.com/youtube/v3/'
-const HEADERS = {'headers': {'Accept': 'application/json'}}
-
-const PLAYLIST_PARAMS = new URLSearchParams({'key': API_KEY, 'part': 'id,contentDetails', 'maxResults': '50'});
-const VIDEO_PARAMS = new URLSearchParams({'key': API_KEY, 'part': 'id,snippet,contentDetails,status'});
+const API_KEY = 'AIzaSyCPbFD7_-Dfb6694tKO4Q7nymekTRmLubQ';
+const API_ROOT = 'https://www.googleapis.com/youtube/v3/';
+const HEADERS = {'headers': {'Accept': 'application/json'}};
 
 function hideElement(elementId) {
   // Adds the 'hidden' class to an element given its ID
-  let element = document.getElementById(elementId);
-  element.classList.add('hidden');
+  document.getElementById(elementId).classList.add('hidden');
 }
 
 function showElement(elementId) {
   // Removes the 'hidden' class from an element given its ID
-  let element = document.getElementById(elementId);
-  element.classList.remove('hidden');
+  document.getElementById(elementId).classList.remove('hidden');
 }
 
 function getFormValue(elementId) {
@@ -30,9 +25,11 @@ function getFormValue(elementId) {
 async function getVideosInPlaylist(playlistCode) {
   // Gets a list of videos in a playlist given the playlist ID
   const videoIds = [];
-  let nextPageToken = null;
+  const PLAYLIST_PARAMS = new URLSearchParams(
+    {'key': API_KEY, 'part': 'id,contentDetails', 'maxResults': '50', 'playlistId': playlistCode}
+  );
   let first = true;
-  PLAYLIST_PARAMS.append('playlistId', playlistCode);
+  let nextPageToken = null;
   while (first || nextPageToken) {
     if (nextPageToken) {
       PLAYLIST_PARAMS.delete('pageToken');
@@ -40,6 +37,8 @@ async function getVideosInPlaylist(playlistCode) {
     }
     const response = await fetch(`${API_ROOT}playlistItems?${PLAYLIST_PARAMS.toString()}`, HEADERS)
       .then(response => response.json());
+    if ('error' in response)
+      throw (response.error.code === 404 ? 'Playlist not found. Is it private?' : response.error.message);
     for (const item of response.items)
       videoIds.push(item['contentDetails']['videoId']);
     nextPageToken = response['nextPageToken'];
@@ -50,8 +49,9 @@ async function getVideosInPlaylist(playlistCode) {
 
 async function getUnavailableVideos(videoIds, countryCode) {
   // Iterates through video IDs and returns a set of available videos and a dict of blocked videos IDs to names
-  const availableVideos = new Set();
   const blockedVideos = {};
+  const availableVideos = new Set();
+  const VIDEO_PARAMS = new URLSearchParams({'key': API_KEY, 'part': 'id,snippet,contentDetails'});
   for (let i = 0; i < videoIds.length; i += 50) {
     // Can make call for up to 50 video IDs at once
     const idParam = videoIds.slice(i, i + 50).join();
@@ -59,6 +59,8 @@ async function getUnavailableVideos(videoIds, countryCode) {
     VIDEO_PARAMS.append('id', idParam);
     const response = await fetch(`${API_ROOT}videos?${VIDEO_PARAMS.toString()}`, HEADERS)
       .then(response => response.json());
+    if ('error' in response)
+      throw(response.error.message);
     for (const item of response.items) {
       const contentDetails = item['contentDetails'];
       if (contentDetails['regionRestriction']) {
@@ -130,16 +132,23 @@ window.addEventListener('load', async function () {
 
     hideElement('table');
     hideElement('resultsText');
+    hideElement('errorText');
     showElement('spinner');
 
-    const videoIds = await getVideosInPlaylist(playlistId);
-    const [availableVideos, blockedVideos] = await getUnavailableVideos(videoIds, countryCode);
-
-    hideElement('spinner');
-    if (videoIds.length !== availableVideos.size) {
-      await outputToTable(videoIds, availableVideos, blockedVideos);
-      showElement('table');
-    } else
-      showElement('resultsText');
+    try {
+      const videoIds = await getVideosInPlaylist(playlistId);
+      const [availableVideos, blockedVideos] = await getUnavailableVideos(videoIds, countryCode);
+      hideElement('spinner');
+      if (videoIds.length !== availableVideos.size) {
+        await outputToTable(videoIds, availableVideos, blockedVideos);
+        showElement('table');
+      } else
+        showElement('resultsText');
+    }
+    catch (error) {
+      document.getElementById('errorText').textContent = error;
+      hideElement('spinner');
+      showElement('errorText');
+    }
   }
 });
