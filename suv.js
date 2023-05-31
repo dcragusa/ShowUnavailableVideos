@@ -98,8 +98,8 @@ function outputRow(videoId, videoName) {
 
   // Search for the name if present, otherwise search for the video ID
   const cell4 = document.createElement('td');
-  const searchTerm = videoName ? videoName : videoId;
-  const searchUrl = `https://www.google.com/search?q=%22${searchTerm}%22`;
+  const searchTerm = videoName ? videoName : `%22${videoId}%22`;
+  const searchUrl = `https://www.google.com/search?q=${searchTerm}`;
   const linkElement = document.createElement('a');
   linkElement.setAttribute('href', searchUrl);
   linkElement.innerHTML = 'Google';
