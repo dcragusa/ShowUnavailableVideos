@@ -24,7 +24,7 @@ function getFormValue(elementId) {
 
 async function getVideosInPlaylist(playlistCode) {
   // Gets a list of videos in a playlist given the playlist ID
-  const videoIds = [];
+  const videoIds = new Set();
   const PLAYLIST_PARAMS = new URLSearchParams(
     {'key': API_KEY, 'part': 'id,contentDetails', 'maxResults': '50', 'playlistId': playlistCode}
   );
@@ -40,7 +40,7 @@ async function getVideosInPlaylist(playlistCode) {
     if ('error' in response)
       throw (response.error.code === 404 ? 'Playlist not found. Is it private?' : response.error.message);
     for (const item of response.items)
-      videoIds.push(item['contentDetails']['videoId']);
+      videoIds.add(item['contentDetails']['videoId']);
     nextPageToken = response['nextPageToken'];
     first = false;
   }
@@ -52,9 +52,10 @@ async function getUnavailableVideos(videoIds, countryCode) {
   const blockedVideos = {};
   const availableVideos = new Set();
   const VIDEO_PARAMS = new URLSearchParams({'key': API_KEY, 'part': 'id,snippet,contentDetails'});
-  for (let i = 0; i < videoIds.length; i += 50) {
+  const videosIdsArray = Array.from(videoIds);
+  for (let i = 0; i < videoIds.size; i += 50) {
     // Can make call for up to 50 video IDs at once
-    const idParam = videoIds.slice(i, i + 50).join();
+    const idParam = videosIdsArray.slice(i, i + 50).join();
     VIDEO_PARAMS.delete('id');
     VIDEO_PARAMS.append('id', idParam);
     const response = await fetch(`${API_ROOT}videos?${VIDEO_PARAMS.toString()}`, HEADERS)
@@ -139,7 +140,7 @@ window.addEventListener('load', async function () {
       const videoIds = await getVideosInPlaylist(playlistId);
       const [availableVideos, blockedVideos] = await getUnavailableVideos(videoIds, countryCode);
       hideElement('spinner');
-      if (videoIds.length !== availableVideos.size) {
+      if (videoIds.size !== availableVideos.size) {
         await outputToTable(videoIds, availableVideos, blockedVideos);
         showElement('table');
       } else
