@@ -16,6 +16,11 @@ Available [here](https://dcragusa.github.io/ShowUnavailableVideos/), you just in
 (as videos are blocked by country), and you will be shown a list of blocked or unavailable videos, as well as links
 to hopefully find another video with the same music. 
 
-- For blocked videos, the search will be for the video name. 
-- For deleted or private videos, the search unfortunately can only be made by ID. If the video was popular enough, hopefully
-there will be some reference to it from which you can infer the video title.
+- There will be a Wayback Machine search link.
+- For blocked videos, the Google search will be for the video name. 
+- For deleted or private videos, the Google search unfortunately can only be made by ID. If the video was popular
+enough, hopefully there will be some reference to it from which you can infer the video title.
+
+Optionally, you can also log in to Youtube. If you do, the site will also be able to view your private playlists,
+and you will be able to remove videos from your playlists directly from the site. Your login is not saved and is only
+valid for a single page visit.
