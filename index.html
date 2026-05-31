@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://accounts.google.com/gsi/client"></script>
   <script src="suv.js"></script>
   <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -24,6 +25,10 @@
     Managing large playlists on Youtube is a pain. Often, videos will be blocked or disappear, and Youtube
     doesn't make it easy to keep track of this. Input a public / unlisted playlist code and your country code
     below, and you will be shown any videos that have been blocked or are unavailable.
+  </div>
+  <div class="col-11 col-md-9 col-lg-8 col-xl-7 col-xxl-6 mx-auto mb-4 lead">
+    You can also optionally sign in to your Youtube account. This will allow you to remove videos from your playlists
+    and let this site view your private playlists.
   </div>
   <div class="col-11 col-md-9 col-lg-7 col-xl-5 col-xxl-4 mx-auto">
     <form class="p-4 border rounded-3 bg-light">
@@ -50,6 +55,10 @@
           Find your two-letter country code <a href="https://www.iban.com/country-codes">here</a>.
         </div>
       </div>
+      <button type="button" id="login" class="w-50 btn btn-secondary mb-2" onclick="client.requestAccessToken();">
+        Youtube Login
+      </button>
+      <div id="loggedIn" class="mb-3 hidden">✅ You're logged in for this visit!</div>
       <button type="button" id="submit" class="w-100 btn btn-lg btn-primary">Show Unavailable Videos</button>
     </form>
   </div>
@@ -61,7 +70,8 @@
         <th>Video ID</th>
         <th>Reason</th>
         <th>Title</th>
-        <th>Search Link</th>
+        <th>Search Links</th>
+        <th id="removeFromPlaylist">Remove from Playlist</th>
       </tr>
       </thead>
       <tbody id="tablebody"></tbody>
@@ -75,7 +85,7 @@
 <footer class="d-flex flex-wrap col-11 col-md-10 col-lg-9 col-xl-8 col-xxl-6 py-3 my-4 border-top mt-auto mx-auto">
   <div class="col-9 d-flex align-items-center">
     <img class="mx-3" src="suv70.png" alt="icon" height="20">
-    <span class="text-muted">Show Unavailable Videos &copy; 2022 David Ragusa</span>
+    <span class="text-muted">Show Unavailable Videos &copy; 2026 David Ragusa</span>
   </div>
   <div class="col-3 d-flex justify-content-end">
     <a class="mx-3" href="https://github.com/dcragusa/ShowUnavailableVideos">Github</a>
